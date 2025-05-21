@@ -1,83 +1,59 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, TextInput, Image, TouchableOpacity,View, ImageSourcePropType} from 'react-native';
-import {useState} from 'react';
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-const imagens: ImageSourcePropType[] = [
-  require('./assets/Dado/dado1.png'),
-  require('./assets/Dado/dado2.png'),
-  require('./assets/Dado/dado3.png'),
-  require('./assets/Dado/dado4.png'),
-  require('./assets/Dado/dado5.png'),
-  require('./assets/Dado/dado6.png')
-]
-
-
-
+// Componente principal do aplicativo
 export default function App() {
-  const[Num, setNum] = useState(0);
-  const[Anterior, setAnterior] = useState(0);
-  
-  function trocaEstado(){
-    setAnterior(Num);
-    do{
-      let sorteio = Math.floor(Math.random() * 6);
-      setNum(sorteio);
-    }while(setNum == setAnterior)
-  }
+  // Estado da idade
+  const [gasolina, setGasolina] = useState("5");
+  const [alcool, setAlcool] = useState("7.30");
+  const [mensagem, setMensagem] = useState("");
 
+  // Função para alterar a idade e exibir a mensagem
+  function calcularPreco() {
+    const precoGasolina = parseFloat(gasolina.replace(',', '.'));
+    const precoAlcool = parseFloat(alcool.replace(',', '.'));
+    const resultado = precoGasolina > 0 && precoAlcool > 0
+          ? precoAlcool / precoGasolina < 0.7
+          ? 'Abasteça com álcool!'
+          : 'Abasteça com gasolina!'
+          : 'Preencha todos os campos!';
+    
+    setMensagem(resultado);
+  }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={trocaEstado}>
-        <Image style={styles2.imagem} source={imagens[Num]}></Image>  
-        <Text style={styles2.texto}>Número sorteado: setNum</Text>
-      </TouchableOpacity>
-      <StatusBar style="auto" /> 
+      <Text style={styles.titulo}>Gasolina ou Álcool?</Text>
+      <Text style={styles.texto}>Preço da gasolina: {gasolina}</Text>
+      <Text style={styles.texto}>Preço do alcool: {alcool}</Text>
+      <Button title="Calcular" onPress={calcularPreco}/>
+      <Text style={styles.mensagem}>{mensagem}</Text>
     </View>
   );
 }
 
+// Estilos do aplicativo
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#956ece',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#e0f7fa',
   },
-});
-
-const styles2 = StyleSheet.create({
+  titulo: {
+    fontSize: 26,
+    color: '#00796b',
+    marginBottom: 10,
+  },
   texto: {
-    color: '#fff',
-    fontSize: 40,
-    fontWeight: 'bold',
-  },
-  fonteCinza: {
-    color: '#c7c9cc',
     fontSize: 20,
-    fontWeight: 'bold',
+    color: '#00796b',
+    marginBottom: 10,
   },
-  imagem: {
-    width: 200,
-    height: 200,
+  mensagem: {
+    fontSize: 18,
+    color: '#004d40',
+    marginBottom: 20,
   },
-  imagem2: {
-    width: 100,
-    height: 100,
-  }
 });
 
-const styles3 = StyleSheet.create({
-  containerOn: {
-    flex: 1,
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  containerOff: {
-    flex: 1,
-    backgroundColor: 'grey',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
